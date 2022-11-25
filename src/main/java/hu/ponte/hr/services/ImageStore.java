@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
@@ -49,5 +51,12 @@ public class ImageStore {
 
     public Image findById(String id) {
         return imageRepository.findById(UUID.fromString(id)).orElseThrow(() -> new NoSuchElementException());
+    }
+
+    public void getPreview(String id, HttpServletResponse response) throws IOException {
+        Image image = findById(id);
+        response.setContentType(image.getFileType());
+        OutputStream out = response.getOutputStream();
+        out.write(image.getData());
     }
 }

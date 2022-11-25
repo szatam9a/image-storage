@@ -31,10 +31,7 @@ public class ImagesController {
 
     @GetMapping("preview/{id}")
     public void getImage(@PathVariable("id") String id, HttpServletResponse response) throws IOException {
-        Image image = imageStore.findById(id);
-        response.setContentType(image.getFileType());
-        OutputStream out = response.getOutputStream();
-        out.write(image.getData());
+        imageStore.getPreview(id,response);
     }
 
 }
