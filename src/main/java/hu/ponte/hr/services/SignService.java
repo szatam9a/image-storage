@@ -22,9 +22,6 @@ public class SignService {
 
     public String encrypt(byte[] data) {
         try {
-
-            Cipher cipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA-256AndMGF1Padding");
-            cipher.init(Cipher.ENCRYPT_MODE, publicKey);
             Signature sign = Signature.getInstance("SHA256withRSA");
             sign.initSign(privateKey);
             sign.update(data);
