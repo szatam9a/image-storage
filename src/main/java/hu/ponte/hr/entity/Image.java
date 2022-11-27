@@ -21,8 +21,7 @@ public class Image {
     private String fileType;
     @Column(name = "size")
     private Long size;
-    @Column(name = "digital_sign")
-    @Lob
+    @Column(name = "digital_sign", length = 400 )
     private String digitalSign;
     @Lob
     private byte[] data;
