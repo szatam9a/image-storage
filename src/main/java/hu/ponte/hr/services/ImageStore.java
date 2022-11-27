@@ -23,9 +23,11 @@ import java.util.stream.Collectors;
 public class ImageStore {
     @Autowired
     private ImageRepository imageRepository;
+    @Autowired
+    private SignService signService;
 
     @Value("${image.max-storage}")
-    private int MAX_STORAGE_PER_IMAGE_IN_MEGABYTE; // in megabyte
+    private int MAX_STORAGE_PER_IMAGE_IN_MEGABYTE;
 
     public Image saveImageToDB(MultipartFile file) throws IOException, FileSizeTooBigException {
 
@@ -36,7 +38,9 @@ public class ImageStore {
         image.setFileName(file.getOriginalFilename());
         image.setFileType(file.getContentType());
         image.setData(file.getBytes());
+        image.setDigitalSign(signService.encrypt(file.getOriginalFilename().getBytes()));
         image.setSize(file.getSize());
+
         return imageRepository.save(image);
     }
 
@@ -46,11 +50,11 @@ public class ImageStore {
                 .name(image.getFileName())
                 .size(image.getSize())
                 .mimeType(image.getFileType())
-                .digitalSign("").build()).collect(Collectors.toList());
+                .digitalSign(image.getDigitalSign()).build()).collect(Collectors.toList());
     }
 
     public Image findById(String id) {
-        return imageRepository.findById(UUID.fromString(id)).orElseThrow(() -> new NoSuchElementException());
+        return imageRepository.findById(UUID.fromString(id)).orElseThrow(() -> new NoSuchElementException("Element id: " + id));
     }
 
     public void getPreview(String id, HttpServletResponse response) throws IOException {

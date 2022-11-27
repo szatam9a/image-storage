@@ -1,7 +1,6 @@
 package hu.ponte.hr.entity;
 
 import lombok.Data;
-import lombok.Generated;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -22,6 +21,9 @@ public class Image {
     private String fileType;
     @Column(name = "size")
     private Long size;
+    @Column(name = "digital_sign")
+    @Lob
+    private String digitalSign;
     @Lob
     private byte[] data;
 }
