@@ -38,7 +38,7 @@ public class ImageStore {
         image.setFileName(file.getOriginalFilename());
         image.setFileType(file.getContentType());
         image.setData(file.getBytes());
-        image.setDigitalSign(signService.encrypt(file.getOriginalFilename().getBytes()));
+        image.setDigitalSign(signService.signatureIt(file.getOriginalFilename().getBytes()));
         image.setSize(file.getSize());
 
         return imageRepository.save(image);
